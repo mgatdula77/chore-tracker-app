@@ -1,0 +1,40 @@
+"""
+Chore management page template.
+
+This page allows the user to add new chores and displays a list of existing
+chores with delete links. The value field supports decimals.
+"""
+
+{% extends "base.html" %}
+
+{% block title %}Manage Chores - Chore Tracker{% endblock %}
+
+{% block content %}
+<h2>Manage Chores</h2>
+
+<form method="POST">
+    <label for="name">Chore Name:</label>
+    <input type="text" id="name" name="name" required />
+    <br /><br />
+    <label for="value">Value:</label>
+    <input type="number" id="value" name="value" step="0.01" required />
+    <br /><br />
+    <input type="submit" value="Add Chore" />
+</form>
+
+<h3>Existing Chores</h3>
+{% if chores %}
+<ul>
+    {% for chore in chores %}
+    <li>
+        {{ chore.name }} ({{ chore.value }})
+        <a href="{{ url_for('delete_chore', chore_id=chore.id) }}" onclick="return confirm('Are you sure you want to delete this chore?');">Delete</a>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No chores have been added yet.</p>
+{% endif %}
+
+<p><a href="{{ url_for('dashboard') }}">Back to Dashboard</a></p>
+{% endblock %}
