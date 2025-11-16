@@ -208,6 +208,10 @@ def create_app() -> Flask:
     return app
 
 
+# 👇 NEW: create the app at module import time so gunicorn can find `app`
+app = create_app()
+
+
 if __name__ == "__main__":  # pragma: no cover
-    app = create_app()
+    # When running locally with `python app.py`, use Flask's dev server
     app.run(host="0.0.0.0", port=5000, debug=True)
