@@ -1,0 +1,48 @@
+"""
+Dashboard page template.
+
+Shows the list of chores for the current user on the current date. Each chore
+has checkboxes for prepared, verified and completed statuses. Users can
+update their progress and save it.
+"""
+
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Chore Tracker{% endblock %}
+
+{% block content %}
+<h2>Welcome, {{ user.username }}!</h2>
+<p>Date: {{ today }}</p>
+
+{% if chores %}
+<form method="POST">
+    <table>
+        <tr>
+            <th>Chore</th>
+            <th>Value</th>
+            <th>Prepared</th>
+            <th>Verified</th>
+            <th>Completed</th>
+        </tr>
+        {% for chore in chores %}
+        <tr>
+            <td>{{ chore.name }}</td>
+            <td>{{ chore.value }}</td>
+            <td><input type="checkbox" name="prepared_{{ chore.id }}" {% if statuses[chore.id].prepared %}checked{% endif %}></td>
+            <td><input type="checkbox" name="verified_{{ chore.id }}" {% if statuses[chore.id].verified %}checked{% endif %}></td>
+            <td><input type="checkbox" name="completed_{{ chore.id }}" {% if statuses[chore.id].completed %}checked{% endif %}></td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br />
+    <input type="submit" value="Save Changes" />
+</form>
+{% else %}
+<p>No chores have been defined yet. <a href="{{ url_for('add_chore') }}">Add a chore</a>.</p>
+{% endif %}
+
+<p>
+    <a href="{{ url_for('add_chore') }}">Manage Chores</a> |
+    <a href="{{ url_for('logout') }}">Logout</a>
+</p>
+{% endblock %}
